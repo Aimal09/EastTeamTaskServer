@@ -17,8 +17,6 @@ MongoDB
 Use these commands from the _root_ of your Server project: 
 ```bash
 #using npm
-npm install
-
 npm start
 ```
 
@@ -27,6 +25,10 @@ npm start
 
 PORT is set to 5001 in ```.env``` file. 
 
+```bash
+#using npm
+npm start
+```
 ## Documentation
 
 This project used MongoDB as database. The database name used is ```easyteam``` having two collections 
@@ -35,7 +37,7 @@ This project used MongoDB as database. The database name used is ```easyteam``` 
 1: employess
 2: locations
 ```
-
+# Add some data to DB
 To start with sign in you setup empoyees by following steps
 
 ```bash
