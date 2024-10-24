@@ -57,7 +57,7 @@ Ensure that the following are installed:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/kidmeeno/easyteam-backend-api.git
+   git clone https://github.com/Aimal09/EastTeamTaskServer
    cd easyteam-backend-api
    ```
 
