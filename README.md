@@ -37,7 +37,7 @@ This project used MongoDB as database. The database name used is ```easyteam``` 
 1: employess
 2: locations
 ```
-# Add some data to DB
+### Add some data to DB
 To start with sign in you setup empoyees by following steps
 
 ```bash
