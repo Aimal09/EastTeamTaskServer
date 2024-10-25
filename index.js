@@ -1,11 +1,10 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import fs from 'fs';
 import Login from './controllers/LoginController.js';
 import AddEmployee from './controllers/EmployeeController.js';
 import AddLocation from './controllers/LocationController.js';
 import GlobalTrackingSettings from './controllers/SettingsConroller.js';
+import { DatabaseClient } from './infrastructure/DatabaseClient.js';
 
 dotenv.config();
 
@@ -14,20 +13,10 @@ const PORT = process.env.PORT || 5001;
 
 app.use(express.json());
 
-mongoose
-    .connect(process.env.MONGODB_URI)
-    .then(() => {
-        console.log('Connected to MongoDB');
-    })
-    .catch((err) => {
-        console.error('MongoDB connection error:', err);
-    });
+const dbClient = new DatabaseClient();
 
-const getSecret = () => {
-    const jwtSecret = fs.readFileSync('private_key.key', 'utf8');
-    process.env.JWT_SECRET = jwtSecret.trim()
-}
-getSecret();
+dbClient.initialize();
+
 
 app.post('/api/login', Login);
 

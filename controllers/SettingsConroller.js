@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 const GlobalTrackingSettings = (req, res) => {
     try {
         const {isGlobalTrackingEnabled} = req.body;

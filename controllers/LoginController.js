@@ -1,6 +1,6 @@
 import Employee from "../models/employeeModel.js";
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
+import { getKey, validatePassword } from "../infrastructure/Auth.js";
 
 const Login = async (req, res) => {
     const { email, password } = req.body;
@@ -11,14 +11,14 @@ const Login = async (req, res) => {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        const isMatch = await bcrypt.compare(password, _employee.password);
+        const isMatch = await validatePassword(password, _employee.password);
         if (!isMatch) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
         const currentEmployee = _employee.toObject();
         const employee = {
-            id:currentEmployee._id,
+            id: currentEmployee._id,
             employeeId: currentEmployee._id,
             locationId: currentEmployee.locationId,
             organizationId: currentEmployee.organizationId,
@@ -28,10 +28,12 @@ const Login = async (req, res) => {
             accessRole: currentEmployee.accessRole,
             role: currentEmployee.role,
             isGlobalTrackingEnabled: process.env.IS_GLOBAL_TRACKING_ENABLED
-          }
+        }
 
-        const token = jwt.sign(employee, process.env.JWT_SECRET, { algorithm: 'RS256' });
-        
+        const jwtSecret = await getKey();
+
+        const token = jwt.sign(employee, jwtSecret, { algorithm: 'RS256' });
+
         const employees = await Employee.find();
         let formatedEmployee = employees.map(em => ({
             id: em._id,
@@ -39,12 +41,12 @@ const Login = async (req, res) => {
             picture: em.picture,
             payrollId: em.payrollId,
             deleted_at: em.deleted_at,
-            
+
         }))
-        
-        formatedEmployee = employee.role.name === "admin" ? formatedEmployee : formatedEmployee.filter(e=> e.id.equals(employee.employeeId));
-        
-        res.json({ token, employee: employee,employees:formatedEmployee });
+
+        formatedEmployee = employee.role.name === "admin" ? formatedEmployee : formatedEmployee.filter(e => e.id.equals(employee.employeeId));
+
+        res.json({ token, employee: employee, employees: formatedEmployee });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
     }
